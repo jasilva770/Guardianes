@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardianes de la Seguridad Digital — Guía Metodológica Docente</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg-void: #06080d;
+  --bg-surface: #0c1017;
+  --bg-elevated: #111720;
+  --bg-panel: #161d2a;
+  --border-dim: rgba(255,255,255,0.05);
+  --border-subtle: rgba(255,255,255,0.08);
+  --border-active: rgba(0,255,180,0.25);
+  --accent-green: #00ffb4;
+  --accent-red: #ff3860;
+  --accent-orange: #ff9f1c;
+  --accent-blue: #00b4ff;
+  --accent-violet: #b94dff;
+  --accent-pink: #ff6b9d;
+  --text-bright: #f0f4f8;
+  --text-normal: #c8d1dc;
+  --text-dim: #7a8699;
+  --text-ghost: #4a5568;
+  --glow-green: 0 0 40px rgba(0,255,180,0.15);
+  --glow-red: 0 0 40px rgba(255,56,96,0.15);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--accent-green) var(--bg-void);}
+body{font-family:'DM Sans',sans-serif;background:var(--bg-void);color:var(--text-normal);line-height:1.7;overflow-x:hidden;}
+
+/* ══════ TACTICAL BACKGROUND ══════ */
+.tac-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.tac-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(0,255,180,0.03),transparent),radial-gradient(ellipse 60% 50% at 80% 90%,rgba(255,56,96,0.03),transparent);}
+.hex-grid{position:absolute;inset:0;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2300ffb4' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.scan-beam{position:fixed;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--accent-green) 50%,transparent 100%);z-index:1000;animation:beamScan 8s linear infinite;opacity:0.5;box-shadow:0 0 20px var(--accent-green);}
+@keyframes beamScan{0%{top:-1px;opacity:0;}5%{opacity:0.5;}95%{opacity:0.5;}100%{top:100%;opacity:0;}}
+
+/* ══════ NAV ══════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;backdrop-filter:blur(24px);background:rgba(6,8,13,0.88);border-bottom:1px solid var(--border-dim);transition:all 0.3s;}
+nav.scrolled{box-shadow:0 8px 32px rgba(0,0,0,0.6);}
+.nav-wrap{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 2rem;}
+.nav-brand{display:flex;align-items:center;gap:0.6rem;font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;color:var(--accent-green);text-decoration:none;}
+.nav-brand i{font-size:1.2rem;filter:drop-shadow(0 0 8px rgba(0,255,180,0.5));animation:pulseIcon 3s ease-in-out infinite;}
+@keyframes pulseIcon{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.nav-menu{display:flex;gap:0.15rem;list-style:none;}
+.nav-menu a{color:var(--text-dim);text-decoration:none;padding:0.4rem 0.9rem;border-radius:8px;font-size:0.8rem;font-weight:500;transition:all 0.25s;}
+.nav-menu a:hover,.nav-menu a.active{color:var(--accent-green);background:rgba(0,255,180,0.06);}
+.mob-toggle{display:none;background:none;border:1px solid var(--border-subtle);color:var(--text-bright);padding:0.4rem 0.6rem;border-radius:6px;cursor:pointer;font-size:1rem;}
+
+/* ══════ HERO ══════ */
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:5rem 2rem 4rem;text-align:center;}
+.hero-inner{max-width:950px;}
+.hero-tag{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,255,180,0.08);border:1px solid rgba(0,255,180,0.15);padding:0.35rem 1.1rem;border-radius:999px;font-family:'Fira Code',monospace;font-size:0.7rem;font-weight:600;color:var(--accent-green);text-transform:uppercase;letter-spacing:2px;margin-bottom:2rem;animation:fadeUp 0.7s ease both;}
+.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-green);animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.hero h1{font-family:'Sora',sans-serif;font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:800;line-height:1.08;margin-bottom:1.5rem;animation:fadeUp 0.7s 0.1s ease both;}
+.hero h1 .g{background:linear-gradient(135deg,var(--accent-green),var(--accent-blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero h1 .r{color:var(--accent-red);-webkit-text-fill-color:var(--accent-red);}
+.hero-desc{font-size:1.15rem;color:var(--text-dim);max-width:720px;margin:0 auto 2.5rem;animation:fadeUp 0.7s 0.2s ease both;}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;animation:fadeUp 0.7s 0.3s ease both;}
+.hero-stat{display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text-dim);}
+.hero-stat i{color:var(--accent-green);font-size:1rem;}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.7s 0.4s ease both;}
+.btn-g{display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 1.8rem;background:var(--accent-green);color:var(--bg-void);border:none;border-radius:10px;font-family:inherit;font-weight:700;font-size:0.9rem;cursor:pointer;text-decoration:none;transition:all 0.3s;box-shadow:var(--glow-green);}
+.btn-g:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(0,255,180,0.25);}
+.btn-o{display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 1.8rem;background:transparent;color:var(--text-bright);border:1px solid var(--border-subtle);border-radius:10px;font-family:inherit;font-weight:600;font-size:0.9rem;cursor:pointer;text-decoration:none;transition:all 0.3s;}
+.btn-o:hover{border-color:var(--accent-green);color:var(--accent-green);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════ SECTIONS ══════ */
+.sec{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:5rem 2rem;}
+.sec-head{text-align:center;margin-bottom:3.5rem;}
+.sec-tag{display:inline-flex;align-items:center;gap:0.4rem;font-family:'Fira Code',monospace;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;margin-bottom:0.8rem;}
+.sec-tag::before,.sec-tag::after{content:'';width:24px;height:1px;opacity:0.3;}
+.sec-head h2{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;margin-bottom:0.8rem;}
+.sec-head p{color:var(--text-dim);max-width:640px;margin:0 auto;font-size:1rem;}
+
+/* ══════ CONTEXT PROBLEM ══════ */
+.ctx-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-bottom:2rem;}
+.ctx-card{background:var(--bg-elevated);border:1px solid var(--border-dim);border-radius:14px;padding:1.8rem;transition:all 0.35s;position:relative;overflow:hidden;}
+.ctx-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity 0.3s;}
+.ctx-card:hover::before{opacity:1;}
+.ctx-card:hover{transform:translateY(-3px);border-color:var(--border-active);}
+.ctx-card:nth-child(1)::before{background:var(--accent-red);}
+.ctx-card:nth-child(2)::before{background:var(--accent-orange);}
+.ctx-card:nth-child(3)::before{background:var(--accent-violet);}
+.ctx-card:nth-child(4)::before{background:var(--accent-blue);}
+.ctx-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1rem;}
+.ctx-card:nth-child(1) .ctx-icon{background:rgba(255,56,96,0.12);color:var(--accent-red);}
+.ctx-card:nth-child(2) .ctx-icon{background:rgba(255,159,28,0.12);color:var(--accent-orange);}
+.ctx-card:nth-child(3) .ctx-icon{background:rgba(185,77,255,0.12);color:var(--accent-violet);}
+.ctx-card:nth-child(4) .ctx-icon{background:rgba(0,180,255,0.12);color:var(--accent-blue);}
+.ctx-card h3{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:0.4rem;color:var(--text-bright);}
+.ctx-card p{font-size:0.85rem;color:var(--text-dim);line-height:1.6;}
+
+.big-stat{background:linear-gradient(135deg,rgba(255,56,96,0.08),rgba(255,159,28,0.08));border:1px solid rgba(255,56,96,0.15);border-radius:16px;padding:2.5rem;text-align:center;}
+.big-num{font-family:'Sora',sans-serif;font-size:clamp(3rem,6vw,5rem);font-weight:800;background:linear-gradient(135deg,var(--accent-red),var(--accent-orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+.big-label{color:var(--text-dim);font-size:1rem;margin-top:0.5rem;}
+
+/* ══════ MÓDULOS DE SIMULACIÓN ══════ */
+.mod-container{display:flex;flex-direction:column;gap:2.5rem;}
+
+.module{background:var(--bg-surface);border:1px solid var(--border-dim);border-radius:18px;overflow:hidden;transition:all 0.4s;}
+.module:hover{border-color:var(--border-active);}
+
+.mod-banner{padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.3s;gap:1rem;flex-wrap:wrap;}
+.mod-banner:hover{background:rgba(0,255,180,0.02);}
+
+.mod-left{display:flex;align-items:center;gap:1.2rem;}
+.mod-num{font-family:'Fira Code',monospace;font-size:0.7rem;font-weight:700;padding:0.5rem 0.8rem;border-radius:8px;letter-spacing:1px;}
+.m1 .mod-num{background:rgba(255,56,96,0.12);color:var(--accent-red);}
+.m2 .mod-num{background:rgba(255,159,28,0.12);color:var(--accent-orange);}
+.m3 .mod-num{background:rgba(185,77,255,0.12);color:var(--accent-violet);}
+.m4 .mod-num{background:rgba(0,180,255,0.12);color:var(--accent-blue);}
+
+.mod-title-area h3{font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:700;color:var(--text-bright);}
+.mod-title-area span{font-size:0.8rem;color:var(--text-dim);}
+
+.mod-right{display:flex;align-items:center;gap:1.2rem;}
+.mod-time{font-family:'Fira Code',monospace;font-size:0.75rem;font-weight:600;padding:0.35rem 0.8rem;border-radius:6px;background:rgba(0,255,180,0.08);color:var(--accent-green);white-space:nowrap;}
+.mod-chevron{color:var(--text-ghost);font-size:0.9rem;transition:transform 0.3s;}
+.module.open .mod-chevron{transform:rotate(180deg);color:var(--accent-green);}
+
+.mod-body{max-height:0;overflow:hidden;transition:max-height 0.6s cubic-bezier(0.16,1,0.3,1);}
+.module.open .mod-body{max-height:5000px;}
+
+.mod-inner{padding:0 2rem 2rem;}
+
+/* Module subsections */
+.mod-section{margin-bottom:1.5rem;}
+.mod-section-title{display:flex;align-items:center;gap:0.6rem;font-family:'Sora',sans-serif;font-size:0.85rem;font-weight:700;color:var(--accent-green);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border-dim);}
+.mod-section-title i{font-size:0.8rem;}
+
+.info-block{background:var(--bg-elevated);border:1px solid var(--border-dim);border-radius:12px;padding:1.4rem;margin-bottom:0.8rem;}
+.info-block h4{font-size:0.9rem;font-weight:700;color:var(--text-bright);margin-bottom:0.5rem;}
+.info-block p,.info-block li{font-size:0.85rem;color:var(--text-dim);line-height:1.7;}
+.info-block ul{padding-left:1.2rem;margin-top:0.4rem;}
+.info-block li{margin-bottom:0.3rem;}
+.info-block .highlight{color:var(--accent-green);font-weight:600;}
+
+.step-flow{display:flex;flex-direction:column;gap:0.6rem;}
+.step-item{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.2rem;background:var(--bg-elevated);border-radius:10px;border-left:3px solid var(--accent-green);}
+.step-time{font-family:'Fira Code',monospace;font-size:0.72rem;font-weight:600;color:var(--accent-green);background:rgba(0,255,180,0.08);padding:0.2rem 0.5rem;border-radius:4px;white-space:nowrap;margin-top:0.15rem;}
+.step-desc{font-size:0.85rem;color:var(--text-dim);}
+.step-desc strong{color:var(--text-bright);}
+
+.m1 .step-item{border-left-color:var(--accent-red);}
+.m1 .step-time{color:var(--accent-red);background:rgba(255,56,96,0.08);}
+.m2 .step-item{border-left-color:var(--accent-orange);}
+.m2 .step-time{color:var(--accent-orange);background:rgba(255,159,28,0.08);}
+.m3 .step-item{border-left-color:var(--accent-violet);}
+.m3 .step-time{color:var(--accent-violet);background:rgba(185,77,255,0.08);}
+.m4 .step-item{border-left-color:var(--accent-blue);}
+.m4 .step-time{color:var(--accent-blue);background:rgba(0,180,255,0.08);}
+
+/* ══════ SIMULATORS ══════ */
+.sim-box{background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:14px;overflow:hidden;margin-top:0.5rem;}
+.sim-top{padding:1rem 1.4rem;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-dim);}
+.sim-top h4{font-size:0.9rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;}
+.sim-score-bar{font-family:'Fira Code',monospace;font-size:0.8rem;font-weight:600;}
+
+.sim-content{padding:1.5rem;}
+
+/* Phishing Sim */
+.email-mock{background:#0e1320;border-radius:10px;border:1px solid var(--border-dim);overflow:hidden;}
+.em-head{padding:1rem 1.3rem;border-bottom:1px solid var(--border-dim);}
+.em-row{display:flex;gap:0.6rem;margin-bottom:0.3rem;font-size:0.82rem;}
+.em-row:last-child{margin-bottom:0;}
+.em-lbl{color:var(--text-ghost);font-weight:600;min-width:55px;}
+.em-val{color:var(--text-dim);}
+.em-body{padding:1.3rem;font-size:0.88rem;color:var(--text-dim);line-height:1.8;}
+.sus{cursor:pointer;border-radius:3px;padding:0 3px;transition:all 0.25s;position:relative;}
+.sus:hover{background:rgba(255,56,96,0.15);color:var(--accent-red);}
+.sus.found{background:rgba(255,56,96,0.2);color:var(--accent-red);text-decoration:underline wavy var(--accent-red);}
+
+.sim-btns{display:flex;gap:0.8rem;justify-content:center;padding:1.2rem;border-top:1px solid var(--border-dim);flex-wrap:wrap;}
+.sb{padding:0.6rem 1.3rem;border-radius:8px;font-family:inherit;font-weight:600;font-size:0.82rem;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:0.4rem;}
+.sb-red{background:rgba(255,56,96,0.12);border:1px solid rgba(255,56,96,0.25);color:var(--accent-red);}
+.sb-red:hover{background:rgba(255,56,96,0.2);}
+.sb-grn{background:rgba(0,255,180,0.1);border:1px solid rgba(0,255,180,0.2);color:var(--accent-green);}
+.sb-grn:hover{background:rgba(0,255,180,0.18);}
+.sb-blu{background:rgba(0,180,255,0.1);border:1px solid rgba(0,180,255,0.2);color:var(--accent-blue);}
+.sb-blu:hover{background:rgba(0,180,255,0.18);}
+
+.feedback-area{padding:1rem 1.5rem;display:none;animation:fadeUp 0.3s ease;}
+.feedback-area.show{display:block;}
+
+/* Password Sim */
+.pwd-tester{display:flex;flex-direction:column;gap:1rem;}
+.pwd-input-wrap{position:relative;}
+.pwd-input{width:100%;padding:1rem 1.2rem;background:var(--bg-elevated);border:2px solid var(--border-subtle);border-radius:10px;color:var(--text-bright);font-family:'Fira Code',monospace;font-size:1rem;outline:none;transition:border-color 0.3s;}
+.pwd-input:focus{border-color:var(--accent-green);}
+.pwd-input::placeholder{color:var(--text-ghost);}
+.pwd-meter{height:6px;background:var(--bg-elevated);border-radius:3px;overflow:hidden;margin-top:0.5rem;}
+.pwd-fill{height:100%;border-radius:3px;width:0%;transition:all 0.4s;}
+.pwd-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.8rem;}
+.pwd-stat{background:var(--bg-elevated);border-radius:10px;padding:1rem;text-align:center;border:1px solid var(--border-dim);}
+.pwd-stat-val{font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:0.2rem;}
+.pwd-stat-lbl{font-size:0.72rem;color:var(--text-ghost);text-transform:uppercase;letter-spacing:1px;}
+.pwd-tips{margin-top:0.8rem;}
+.pwd-tip{display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;padding:0.3rem 0;}
+.pwd-tip i{font-size:0.75rem;width:16px;text-align:center;}
+.pwd-tip.pass i{color:var(--accent-green);}
+.pwd-tip.fail i{color:var(--accent-red);}
+
+/* Privacy Sim */
+.profile-mock{background:var(--bg-elevated);border-radius:12px;border:1px solid var(--border-dim);padding:1.5rem;}
+.profile-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-dim);}
+.profile-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--accent-violet),var(--accent-pink));display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;}
+.profile-name{font-weight:700;color:var(--text-bright);}
+.profile-handle{font-size:0.8rem;color:var(--text-ghost);}
+.privacy-items{display:flex;flex-direction:column;gap:0.6rem;}
+.priv-item{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 1rem;background:rgba(0,0,0,0.2);border-radius:8px;transition:all 0.3s;}
+.priv-item-left{display:flex;align-items:center;gap:0.8rem;font-size:0.85rem;}
+.priv-item-left i{width:20px;text-align:center;color:var(--text-ghost);}
+.priv-toggle{position:relative;width:44px;height:24px;border-radius:12px;cursor:pointer;transition:all 0.3s;border:none;}
+.priv-toggle.danger{background:rgba(255,56,96,0.3);}
+.priv-toggle.safe{background:rgba(0,255,180,0.3);}
+.priv-toggle::after{content:'';position:absolute;top:3px;width:18px;height:18px;border-radius:50%;transition:all 0.3s;}
+.priv-toggle.danger::after{left:3px;background:var(--accent-red);}
+.priv-toggle.safe::after{right:3px;background:var(--accent-green);}
+.priv-score-box{margin-top:1rem;text-align:center;padding:1rem;background:rgba(0,0,0,0.2);border-radius:10px;}
+
+/* Update Sim */
+.device-mock{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;}
+.dev-card{background:var(--bg-elevated);border:1px solid var(--border-dim);border-radius:12px;padding:1.3rem;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;}
+.dev-card:hover{border-color:var(--border-active);}
+.dev-card.updated{border-color:rgba(0,255,180,0.3);background:rgba(0,255,180,0.03);}
+.dev-card.vulnerable{border-color:rgba(255,56,96,0.3);background:rgba(255,56,96,0.03);}
+.dev-icon{font-size:2rem;margin-bottom:0.6rem;}
+.dev-name{font-weight:700;font-size:0.9rem;color:var(--text-bright);margin-bottom:0.3rem;}
+.dev-ver{font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--text-ghost);margin-bottom:0.5rem;}
+.dev-status{font-size:0.72rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:4px;display:inline-block;}
+.dev-status.vuln{background:rgba(255,56,96,0.15);color:var(--accent-red);}
+.dev-status.ok{background:rgba(0,255,180,0.12);color:var(--accent-green);}
+.dev-btn{margin-top:0.8rem;padding:0.4rem 1rem;border-radius:6px;border:1px solid var(--border-subtle);background:transparent;color:var(--text-dim);font-family:inherit;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.3s;}
+.dev-btn:hover{border-color:var(--accent-green);color:var(--accent-green);}
+.dev-card.updated .dev-btn{border-color:rgba(0,255,180,0.3);color:var(--accent-green);background:rgba(0,255,180,0.08);cursor:default;}
+
+/* ══════ TIMELINE OVERVIEW ══════ */
+.timeline-bar{background:var(--bg-elevated);border:1px solid var(--border-dim);border-radius:14px;padding:2rem;margin-top:2rem;overflow-x:auto;}
+.tl-track{display:flex;gap:0;min-width:700px;position:relative;}
+.tl-track::before{content:'';position:absolute;top:50%;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent-red),var(--accent-orange),var(--accent-violet),var(--accent-blue),var(--accent-green));border-radius:2px;transform:translateY(-50%);z-index:0;}
+.tl-seg{flex:1;position:relative;z-index:1;text-align:center;padding:0 0.5rem;}
+.tl-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fira Code',monospace;font-size:0.7rem;font-weight:700;margin:0 auto 0.6rem;border:3px solid;}
+.tl-seg:nth-child(1) .tl-dot{background:rgba(255,56,96,0.2);border-color:var(--accent-red);color:var(--accent-red);}
+.tl-seg:nth-child(2) .tl-dot{background:rgba(255,159,28,0.2);border-color:var(--accent-orange);color:var(--accent-orange);}
+.tl-seg:nth-child(3) .tl-dot{background:rgba(185,77,255,0.2);border-color:var(--accent-violet);color:var(--accent-violet);}
+.tl-seg:nth-child(4) .tl-dot{background:rgba(0,180,255,0.2);border-color:var(--accent-blue);color:var(--accent-blue);}
+.tl-seg:nth-child(5) .tl-dot{background:rgba(0,255,180,0.2);border-color:var(--accent-green);color:var(--accent-green);}
+.tl-label{font-size:0.72rem;font-weight:700;color:var(--text-bright);margin-bottom:0.15rem;}
+.tl-time{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--text-ghost);}
+
+/* ══════ FOOTER ══════ */
+footer{position:relative;z-index:1;border-top:1px solid var(--border-dim);padding:2.5rem 2rem;text-align:center;color:var(--text-ghost);font-size:0.82rem;}
+footer a{color:var(--accent-green);text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+
+/* ══════ REVEAL ══════ */
+.rv{opacity:0;transform:translateY(35px);transition:all 0.7s cubic-bezier(0.16,1,0.3,1);}
+.rv.vis{opacity:1;transform:translateY(0);}
+
+/* ══════ RESPONSIVE ══════ */
+@media(max-width:768px){
+  .nav-menu{display:none;}
+  .mob-toggle{display:block;}
+  .ctx-grid{grid-template-columns:1fr;}
+  .mod-banner{flex-direction:column;align-items:flex-start;}
+  .mod-right{align-self:flex-end;}
+  .device-mock{grid-template-columns:1fr;}
+  .pwd-results{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="tac-bg"><div class="hex-grid"></div></div>
+<div class="scan-beam"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+<div class="nav-wrap">
+  <a href="#" class="nav-brand"><i class="fas fa-shield-halved"></i> Guardianes</a>
+  <ul class="nav-menu">
+    <li><a href="#contexto">Contexto</a></li>
+    <li><a href="#modulos">Módulos</a></li>
+    <li><a href="#resumen">Resumen</a></li>
+  </ul>
+  <button class="mob-toggle" onclick="this.nextElementSibling?null:null;document.querySelector('.nav-menu').style.display=document.querySelector('.nav-menu').style.display==='flex'?'none':'flex';document.querySelector('.nav-menu').style.cssText=document.querySelector('.nav-menu').style.display==='none'?'':'display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:rgba(6,8,13,0.97);padding:1rem;border-bottom:1px solid var(--border-dim);z-index:999;'"><i class="fas fa-bars"></i></button>
+</div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+<div class="hero-inner">
+  <div class="hero-tag"><span class="dot"></span> Guía Metodológica para Docentes</div>
+  <h1><span class="g">Guardianes de la</span><br><span class="r">Seguridad Digital</span></h1>
+  <p class="hero-desc">4 módulos de simulación interactiva que transforman al eslabón más débil de la ciberseguridad —el usuario y sus prácticas inseguras— en la primera línea de defensa contra hackers.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><i class="fas fa-clock"></i> 30 minutos exactos</div>
+    <div class="hero-stat"><i class="fas fa-users"></i> 15-40 estudiantes</div>
+    <div class="hero-stat"><i class="fas fa-puzzle-piece"></i> 4 simulaciones</div>
+    <div class="hero-stat"><i class="fas fa-gamepad"></i> 100% interactivo</div>
+  </div>
+  <div class="hero-actions">
+    <a href="#modulos" class="btn-g"><i class="fas fa-play"></i> Ver los 4 Módulos</a>
+    <a href="#contexto" class="btn-o"><i class="fas fa-info-circle"></i> Contexto Pedagógico</a>
+  </div>
+</div>
+</header>
+
+<!-- CONTEXTO PEDAGÓGICO -->
+<section class="sec" id="contexto">
+<div class="sec-head rv">
+  <div class="sec-tag" style="color:var(--accent-red);">
+    <span style="background:var(--accent-red);">&nbsp;</span>
+    Contexto Pedagógico
+    <span style="background:var(--accent-red);">&nbsp;</span>
+  </div>
+  <h2>El Eslabón Más Débil: <span style="color:var(--accent-red)">El Usuario</span></h2>
+  <p>Las empresas invierten millones en firewalls y antivirus, pero un solo clic en un enlace de phishing puede derrumbar toda la defensa. El factor humano es la vulnerabilidad #1.</p>
+</div>
+
+<div class="ctx-grid rv">
+  <div class="ctx-card">
+    <div class="ctx-icon"><i class="fas fa-fish"></i></div>
+    <h3>Phishing & Ingeniería Social</h3>
+    <p>Correos y mensajes falsos que manipulan psicológicamente al usuario para que entregue credenciales, dinero o acceso a sistemas corporativos.</p>
+  </div>
+  <div class="ctx-card">
+    <div class="ctx-icon"><i class="fas fa-key"></i></div>
+    <h3>Contraseñas Débiles</h3>
+    <p>Reutilización de contraseñas simples como "123456" o "password" en múltiples servicios. Un solo robo compromete todas las cuentas del usuario.</p>
+  </div>
+  <div class="ctx-card">
+    <div class="ctx-icon"><i class="fas fa-share-nodes"></i></div>
+    <h3>Sobreexposición Digital</h3>
+    <p>Compartir ubicación en tiempo real, datos personales y rutinas en redes sociales facilita el robo de identidad y ataques dirigidos.</p>
+  </div>
+  <div class="ctx-card">
+    <div class="ctx-icon"><i class="fas fa-bug"></i></div>
+    <h3>Software Desactualizado</h3>
+    <p>No instalar actualizaciones de seguridad deja puertas abiertas que los hackers explotan con malware, ransomware y otros ataques automatizados.</p>
+  </div>
+</div>
+
+<div class="big-stat rv">
+  <div class="big-num" id="bigCounter">0%</div>
+  <div class="big-label">de los ciberataques exitosos se originan por errores humanos (IBM Security, 2024)</div>
+</div>
+</section>
+
+<!-- MÓDULOS -->
+<section class="sec" id="modulos">
+<div class="sec-head rv">
+  <div class="sec-tag" style="color:var(--accent-green);">
+    <span style="background:var(--accent-green);">&nbsp;</span>
+    Estructura del Taller · 30 min
+    <span style="background:var(--accent-green);">&nbsp;</span>
+  </div>
+  <h2>4 Módulos + <span style="color:var(--accent-green)">Cierre</span> = 30 min</h2>
+  <p>Cada módulo aborda una vulnerabilidad del usuario con su propia simulación interactiva. Haz clic en cada módulo para ver la explicación metodológica completa, guión del docente y simulación de ejemplo.</p>
+</div>
+
+<!-- Barra visual de tiempo -->
+<div class="timeline-bar rv">
+  <div class="tl-track">
+    <div class="tl-seg">
+      <div class="tl-dot">M1</div>
+      <div class="tl-label">Phishing</div>
+      <div class="tl-time">0:00 → 8:00</div>
+    </div>
+    <div class="tl-seg">
+      <div class="tl-dot">M2</div>
+      <div class="tl-label">Contraseñas</div>
+      <div class="tl-time">8:00 → 15:00</div>
+    </div>
+    <div class="tl-seg">
+      <div class="tl-dot">M3</div>
+      <div class="tl-label">Privacidad</div>
+      <div class="tl-time">15:00 → 22:00</div>
+    </div>
+    <div class="tl-seg">
+      <div class="tl-dot">M4</div>
+      <div class="tl-label">Actualizaciones</div>
+      <div class="tl-time">22:00 → 27:00</div>
+    </div>
+    <div class="tl-seg">
+      <div class="tl-dot"><i class="fas fa-flag-checkered" style="font-size:0.65rem;"></i></div>
+      <div class="tl-label">Cierre</div>
+      <div class="tl-time">27:00 → 30:00</div>
+    </div>
+  </div>
+</div>
+
+<div class="mod-container" style="margin-top:2.5rem;">
+
+<!-- ═══════════ MÓDULO 1: PHISHING ═══════════ -->
+<div class="module m1 rv" id="mod1">
+  <div class="mod-banner" onclick="toggleMod(this.parentElement)">
+    <div class="mod-left">
+      <div class="mod-num">MÓDULO 01</div>
+      <div class="mod-title-area">
+        <h3><i class="fas fa-fish" style="color:var(--accent-red);margin-right:0.4rem;"></i> Cazadores de Phishing</h3>
+        <span>Phishing & Ingeniería Social — Aprende a detectar correos y mensajes fraudulentos</span>
+      </div>
+    </div>
+    <div class="mod-right">
+      <div class="mod-time"><i class="fas fa-clock"></i> 8 min</div>
+      <i class="fas fa-chevron-down mod-chevron"></i>
+    </div>
+  </div>
+  <div class="mod-body">
+    <div class="mod-inner">
+
+      <!-- ¿En qué consiste? -->
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-info-circle"></i> ¿En qué consiste esta actividad?</div>
+        <div class="info-block">
+          <h4>Descripción General</h4>
+          <p>Los estudiantes se convierten en <span class="highlight">"detectives digitales"</span> que deben analizar correos electrónicos sospechosos e identificar las señales de alerta que delatan un intento de phishing. La actividad usa correos simulados que replican tácticas reales: urgencia falsa, dominios alterados, enlaces acortados y firmas genéricas. Los estudiantes trabajan en escuadrones de 4-5 personas y compiten por encontrar la mayor cantidad de pistas.</p>
+        </div>
+        <div class="info-block">
+          <h4>Objetivo de Aprendizaje</h4>
+          <p>Al finalizar, el estudiante será capaz de <span class="highlight">identificar al menos 4 señales de phishing</span> en un correo electrónico y tomar la decisión correcta (reportar, eliminar o verificar por canal oficial), protegiendo así sus credenciales y datos personales.</p>
+        </div>
+        <div class="info-block">
+          <h4>Fundamento Pedagógico</h4>
+          <p>Basada en el <span class="highlight">aprendizaje experiencial de Kolb</span>: el estudiante primero experimenta la amenaza (vive la trampa), luego reflexiona sobre por qué cayó o no, y finalmente conceptualiza las reglas de protección. La simulación activa la memoria emocional, generando retención 3x superior a la enseñanza teórica tradicional. Nivel Bloom: <strong>Analizar + Evaluar</strong>.</p>
+        </div>
+      </div>
+
+      <!-- Paso a paso con tiempos -->
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-list-ol"></i> Paso a paso del Docente (8 minutos)</div>
+        <div class="step-flow">
+          <div class="step-item">
+            <div class="step-time">0:00–1:30</div>
+            <div class="step-desc"><strong>Gancho emocional:</strong> Proyectar el mapa de ciberataques en tiempo real (<code>cybermap.kaspersky.com</code>). Decir: <em>"Mientras hablamos, miles de ataques están ocurriendo. El 95% empiezan con un simple correo."</em> Formar escuadrones de 4-5 personas. Asignar nombres creativos: "FireWallers", "CyberNinjas", etc.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">1:30–5:00</div>
+            <div class="step-desc"><strong>Simulación "Cazadores de Phishing":</strong> Proyectar 3 correos electrónicos (2 son phishing, 1 es legítimo). Cada escuadrón tiene <strong>60 segundos por correo</strong> para identificar señales de alerta y anotar las pistas en papel. Señales a buscar: dominio alterado, urgencia falsa, enlace acortado, errores ortográficos, firma genérica, solicitud de datos sensibles.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">5:00–7:00</div>
+            <div class="step-desc"><strong>Puesta en común:</strong> Cada escuadrón comparte 1 pista que encontró. El docente valida y complementa. <strong>+10 puntos</strong> por cada pista correcta, <strong>+5 bonus</strong> si explican por qué es sospechosa. Registrar puntos en pizarra.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">7:00–8:00</div>
+            <div class="step-desc"><strong>Regla de oro:</strong> Cerrar con la regla: <em>"Ante la duda: NO hagas clic. Llama directamente a la entidad usando su número oficial, NUNCA el del correo."</em> Transición rápida al módulo 2.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulador interactivo -->
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-play-circle"></i> Simulación interactiva de ejemplo</div>
+        <p style="font-size:0.82rem;color:var(--text-ghost);margin-bottom:0.8rem;">Haz clic en los elementos sospechosos del correo. Este ejemplo muestra cómo funciona la actividad en clase.</p>
+
+        <div class="sim-box" id="phishSim">
+          <div class="sim-top">
+            <h4><i class="fas fa-envelope" style="color:var(--accent-red);"></i> Correo sospechoso</h4>
+            <div class="sim-score-bar">Pistas: <span id="phishFound" style="color:var(--accent-green);">0</span>/<span id="phishTotal">5</span></div>
+          </div>
+          <div class="sim-content">
+            <div class="email-mock">
+              <div class="em-head">
+                <div class="em-row"><span class="em-lbl">De:</span><span class="em-val"><span class="sus" data-tip="🚨 Dominio falso: 'bancolombl4.com' usa el número 4 en vez de la letra 'a'. Siempre verifica el dominio letra por letra." onclick="phishClue(this)">soporte@bancolombl4.com</span></span></div>
+                <div class="em-row"><span class="em-lbl">Para:</span><span class="em-val">cliente_valorado@correo.com</span></div>
+                <div class="em-row"><span class="em-lbl">Asunto:</span><span class="em-val"><span class="sus" data-tip="🚨 Urgencia artificial: '¡URGENTE!' y '24 horas' son tácticas de presión psicológica para que actúes sin pensar." onclick="phishClue(this)">¡URGENTE! Su cuenta será suspendida en 24 horas</span></span></div>
+              </div>
+              <div class="em-body">
+                <p>Estimado cliente,</p>
+                <p style="margin-top:0.8rem;">Hemos detectado <span class="sus" data-tip="🚨 Lenguaje alarmista: 'actividad sospechosa' sin detalles específicos. Un banco real te diría exactamente qué pasó y no pediría datos por correo." onclick="phishClue(this)">actividad sospechosa en su cuenta bancaria</span>. Para evitar el bloqueo permanente, necesitamos que verifique su identidad.</p>
+                <p style="margin-top:0.8rem;">Confirme sus datos aquí:</p>
+                <p style="margin-top:0.4rem;"><span class="sus" data-tip="🚨 Enlace acortado (bit.ly): oculta la URL real. Un banco NUNCA usaría un acortador. Podría llevar a cualquier sitio malicioso." onclick="phishClue(this)" style="color:var(--accent-blue);text-decoration:underline;">https://bit.ly/bancol-verificar-2024</span></p>
+                <p style="margin-top:0.8rem;">Si no lo hace en 24 horas, su cuenta será <strong>bloqueada permanentemente</strong>.</p>
+                <p style="margin-top:1rem;">Atentamente,<br><span class="sus" data-tip="🚨 Firma genérica: sin nombre del asesor, cargo ni datos de contacto. Un banco real siempre firma con nombre completo y extensión." onclick="phishClue(this)">Equipo de Soporte Bancolombia</span></p>
+              </div>
+            </div>
+          </div>
+          <div class="sim-btns">
+            <button class="sb sb-red" onclick="phishAction('click')"><i class="fas fa-mouse-pointer"></i> Hacer clic en el enlace</button>
+            <button class="sb sb-grn" onclick="phishAction('report')"><i class="fas fa-flag"></i> Reportar como phishing</button>
+            <button class="sb sb-blu" onclick="phishAction('call')"><i class="fas fa-phone"></i> Llamar al banco</button>
+          </div>
+          <div class="feedback-area" id="phishFB"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MÓDULO 2: CONTRASEÑAS ═══════════ -->
+<div class="module m2 rv" id="mod2">
+  <div class="mod-banner" onclick="toggleMod(this.parentElement)">
+    <div class="mod-left">
+      <div class="mod-num">MÓDULO 02</div>
+      <div class="mod-title-area">
+        <h3><i class="fas fa-key" style="color:var(--accent-orange);margin-right:0.4rem;"></i> Forjadores de Contraseñas</h3>
+        <span>Contraseñas Débiles — Crea y evalúa contraseñas realmente seguras</span>
+      </div>
+    </div>
+    <div class="mod-right">
+      <div class="mod-time"><i class="fas fa-clock"></i> 7 min</div>
+      <i class="fas fa-chevron-down mod-chevron"></i>
+    </div>
+  </div>
+  <div class="mod-body">
+    <div class="mod-inner">
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-info-circle"></i> ¿En qué consiste esta actividad?</div>
+        <div class="info-block">
+          <h4>Descripción General</h4>
+          <p>Competencia entre escuadrones para crear la <span class="highlight">contraseña más segura posible</span>. Cada equipo inventa una contraseña y el docente la prueba en tiempo real en un evaluador de fortaleza, proyectando los resultados. Se revela cuánto tardaría un hacker en descifrar cada una. Luego se enseña la técnica de "frase-contraseña" y el uso de gestores de contraseñas + MFA como defensa definitiva.</p>
+        </div>
+        <div class="info-block">
+          <h4>Objetivo de Aprendizaje</h4>
+          <p>Al finalizar, el estudiante será capaz de <span class="highlight">crear contraseñas de 16+ caracteres</span> usando la técnica de frases, explicar por qué nunca reutilizar contraseñas, y <span class="highlight">activar MFA</span> en al menos una cuenta personal.</p>
+        </div>
+        <div class="info-block">
+          <h4>Fundamento Pedagógico</h4>
+          <p>Aprendizaje por <span class="highlight">competencia constructiva</span> (Johnson & Johnson): la rivalidad entre equipos genera motivación extrínseca, mientras que la creación de la contraseña activa procesos cognitivos superiores (creación, según Bloom). La retroalimentación inmediata (tiempo de descifrado) refuerza el aprendizaje mediante gratificación/corrección instantánea.</p>
+        </div>
+      </div>
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-list-ol"></i> Paso a paso del Docente (7 minutos)</div>
+        <div class="step-flow">
+          <div class="step-item">
+            <div class="step-time">8:00–9:00</div>
+            <div class="step-desc"><strong>Impacto visual:</strong> Proyectar lista de las 10 contraseñas más hackeadas del mundo (123456, password, qwerty...). Preguntar: <em>"¿Alguno usa o ha usado alguna de estas?"</em> (risas garantizadas). Revelar: un ataque de fuerza bruta descifra "123456" en <strong>menos de 1 segundo</strong>.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">9:00–11:30</div>
+            <div class="step-desc"><strong>Reto "Forjadores":</strong> Cada escuadrón tiene <strong>90 segundos</strong> para escribir en un papel la contraseña más segura que puedan inventar. Reglas: no puede contener datos personales (nombre, fecha, mascota). Un representante la dicta al docente, quien la evalúa en vivo proyectando el resultado. <strong>+20 puntos</strong> al escuadrón cuya contraseña resista más tiempo.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">11:30–13:30</div>
+            <div class="step-desc"><strong>Enseñanza express: Frase-contraseña + MFA:</strong> Enseñar la técnica de <em>frase-contraseña</em>: tomar una frase memorable y convertirla (ej: "Mi gato Tom come 3 atunes" → <code>MgTc3@tunes!</code>). Explicar MFA en 60 segundos: <em>"Aunque roben tu contraseña, sin tu teléfono no entran."</em> Mencionar gestores como Bitwarden.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">13:30–15:00</div>
+            <div class="step-desc"><strong>Acción inmediata:</strong> Pedir a los estudiantes que abran su celular y <strong>activen MFA en su correo principal</strong> ahora mismo (Google/Outlook). El docente guía los pasos en pantalla. <em>"Quien lo active ahora, +15 puntos para su escuadrón."</em></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-play-circle"></i> Simulación interactiva de ejemplo</div>
+        <p style="font-size:0.82rem;color:var(--text-ghost);margin-bottom:0.8rem;">Escribe una contraseña y mira en tiempo real qué tan segura es. Así funciona la evaluación en clase.</p>
+
+        <div class="sim-box">
+          <div class="sim-top">
+            <h4><i class="fas fa-key" style="color:var(--accent-orange);"></i> Evaluador de Contraseñas</h4>
+          </div>
+          <div class="sim-content">
+            <div class="pwd-tester">
+              <div class="pwd-input-wrap">
+                <input type="text" class="pwd-input" id="pwdInput" placeholder="Escribe tu contraseña aquí..." oninput="evalPwd(this.value)" autocomplete="off">
+                <div class="pwd-meter"><div class="pwd-fill" id="pwdFill"></div></div>
+              </div>
+              <div class="pwd-results">
+                <div class="pwd-stat">
+                  <div class="pwd-stat-val" id="pwdTime" style="color:var(--accent-red);">—</div>
+                  <div class="pwd-stat-lbl">Tiempo para hackear</div>
+                </div>
+                <div class="pwd-stat">
+                  <div class="pwd-stat-val" id="pwdLen" style="color:var(--text-ghost);">0</div>
+                  <div class="pwd-stat-lbl">Caracteres</div>
+                </div>
+                <div class="pwd-stat">
+                  <div class="pwd-stat-val" id="pwdScore" style="color:var(--text-ghost);">—</div>
+                  <div class="pwd-stat-lbl">Nivel</div>
+                </div>
+                <div class="pwd-stat">
+                  <div class="pwd-stat-val" id="pwdEntropy" style="color:var(--text-ghost);">0</div>
+                  <div class="pwd-stat-lbl">Bits de entropía</div>
+                </div>
+              </div>
+              <div class="pwd-tips" id="pwdTips"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MÓDULO 3: PRIVACIDAD ═══════════ -->
+<div class="module m3 rv" id="mod3">
+  <div class="mod-banner" onclick="toggleMod(this.parentElement)">
+    <div class="mod-left">
+      <div class="mod-num">MÓDULO 03</div>
+      <div class="mod-title-area">
+        <h3><i class="fas fa-share-nodes" style="color:var(--accent-violet);margin-right:0.4rem;"></i> Escudos de Privacidad</h3>
+        <span>Sobreexposición Digital — Configura tu perfil como un experto en privacidad</span>
+      </div>
+    </div>
+    <div class="mod-right">
+      <div class="mod-time"><i class="fas fa-clock"></i> 7 min</div>
+      <i class="fas fa-chevron-down mod-chevron"></i>
+    </div>
+  </div>
+  <div class="mod-body">
+    <div class="mod-inner">
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-info-circle"></i> ¿En qué consiste esta actividad?</div>
+        <div class="info-block">
+          <h4>Descripción General</h4>
+          <p>Se presenta un <span class="highlight">perfil ficticio de redes sociales completamente expuesto</span> (ubicación pública, fotos con datos sensibles, lista de amigos visible). Los escuadrones deben auditar el perfil e identificar qué información es peligrosa y por qué. Luego, cada estudiante revisa su PROPIO perfil real en el celular y corrige al menos 3 configuraciones de privacidad en tiempo real.</p>
+        </div>
+        <div class="info-block">
+          <h4>Objetivo de Aprendizaje</h4>
+          <p>Al finalizar, el estudiante será capaz de <span class="highlight">identificar información personal que no debe ser pública</span> y habrá modificado al menos 3 configuraciones de privacidad en sus propias redes sociales durante la sesión.</p>
+        </div>
+        <div class="info-block">
+          <h4>Fundamento Pedagógico</h4>
+          <p>Modelo <span class="highlight">ABP (Aprendizaje Basado en Problemas)</span>: se presenta un caso-problema (perfil inseguro) que el estudiante debe resolver con pensamiento crítico. La transferencia inmediata al perfil propio cierra el ciclo de Kolb (experiencia concreta → experimentación activa) y garantiza que el aprendizaje se aplique en la vida real <em>ese mismo día</em>.</p>
+        </div>
+      </div>
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-list-ol"></i> Paso a paso del Docente (7 minutos)</div>
+        <div class="step-flow">
+          <div class="step-item">
+            <div class="step-time">15:00–16:30</div>
+            <div class="step-desc"><strong>Caso de estudio:</strong> Proyectar el perfil ficticio de "Carlos Gómez": foto de cédula en historia, ubicación en tiempo real activada, correo visible, lista de amigos pública, publicaciones de vacaciones en vivo. Preguntar: <em>"Si fueran hackers, ¿qué datos le robarían a Carlos y cómo los usarían?"</em></div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">16:30–18:30</div>
+            <div class="step-desc"><strong>Auditoría express:</strong> Los escuadrones tienen <strong>2 minutos</strong> para listar todos los errores de privacidad de Carlos. <strong>+5 puntos</strong> por cada error identificado + explicación de cómo un hacker lo explotaría. Puesta en común rápida: un vocero por equipo comparte el error más grave que encontró.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">18:30–20:30</div>
+            <div class="step-desc"><strong>Revisión personal en vivo:</strong> Los estudiantes abren su celular y revisan SU perfil real. El docente proyecta paso a paso: (1) Ir a Configuración → Privacidad en Instagram/Facebook, (2) Cambiar cuenta a privada, (3) Desactivar ubicación en publicaciones, (4) Limitar quién puede ver amigos. <strong>+10 puntos</strong> por cada cambio completado con captura de pantalla.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">20:30–22:00</div>
+            <div class="step-desc"><strong>Reglas clave:</strong> Cerrar con 3 reglas: (1) Nunca publicar documentos de identidad, (2) No compartir ubicación en tiempo real, (3) Revisar privacidad cada 3 meses. <em>"Lo que compartes en Internet queda para siempre."</em></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-play-circle"></i> Simulación interactiva de ejemplo</div>
+        <p style="font-size:0.82rem;color:var(--text-ghost);margin-bottom:0.8rem;">Perfil ficticio expuesto. Activa/desactiva las configuraciones para asegurar a "Carlos". Esto replica lo que los estudiantes harán con sus propios perfiles.</p>
+
+        <div class="sim-box">
+          <div class="sim-top">
+            <h4><i class="fas fa-user-shield" style="color:var(--accent-violet);"></i> Auditoría de Privacidad</h4>
+            <div class="sim-score-bar">Seguridad: <span id="privScore" style="color:var(--accent-red);">15%</span></div>
+          </div>
+          <div class="sim-content">
+            <div class="profile-mock">
+              <div class="profile-header">
+                <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                <div>
+                  <div class="profile-name">Carlos Gómez</div>
+                  <div class="profile-handle">@carlosg_2001 · Yopal, Casanare</div>
+                </div>
+              </div>
+              <div class="privacy-items" id="privItems">
+                <div class="priv-item" data-safe="false">
+                  <div class="priv-item-left"><i class="fas fa-globe"></i> <span>Perfil público (cualquiera puede ver)</span></div>
+                  <button class="priv-toggle danger" onclick="togglePriv(this)"></button>
+                </div>
+                <div class="priv-item" data-safe="false">
+                  <div class="priv-item-left"><i class="fas fa-location-dot"></i> <span>Ubicación en tiempo real activada</span></div>
+                  <button class="priv-toggle danger" onclick="togglePriv(this)"></button>
+                </div>
+                <div class="priv-item" data-safe="false">
+                  <div class="priv-item-left"><i class="fas fa-envelope"></i> <span>Correo electrónico visible en perfil</span></div>
+                  <button class="priv-toggle danger" onclick="togglePriv(this)"></button>
+                </div>
+                <div class="priv-item" data-safe="false">
+                  <div class="priv-item-left"><i class="fas fa-users"></i> <span>Lista de amigos visible para todos</span></div>
+                  <button class="priv-toggle danger" onclick="togglePriv(this)"></button>
+                </div>
+                <div class="priv-item" data-safe="false">
+                  <div class="priv-item-left"><i class="fas fa-id-card"></i> <span>Foto de cédula en historias destacadas</span></div>
+                  <button class="priv-toggle danger" onclick="togglePriv(this)"></button>
+                </div>
+                <div class="priv-item" data-safe="false">
+                  <div class="priv-item-left"><i class="fas fa-phone"></i> <span>Número de teléfono en biografía</span></div>
+                  <button class="priv-toggle danger" onclick="togglePriv(this)"></button>
+                </div>
+              </div>
+              <div class="priv-score-box" id="privResult">
+                <span style="font-size:0.8rem;color:var(--text-ghost);">Activa las protecciones para asegurar el perfil de Carlos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MÓDULO 4: ACTUALIZACIONES ═══════════ -->
+<div class="module m4 rv" id="mod4">
+  <div class="mod-banner" onclick="toggleMod(this.parentElement)">
+    <div class="mod-left">
+      <div class="mod-num">MÓDULO 04</div>
+      <div class="mod-title-area">
+        <h3><i class="fas fa-bug" style="color:var(--accent-blue);margin-right:0.4rem;"></i> Patrulla de Actualizaciones</h3>
+        <span>Software Desactualizado — Detecta vulnerabilidades y aprende a parchear</span>
+      </div>
+    </div>
+    <div class="mod-right">
+      <div class="mod-time"><i class="fas fa-clock"></i> 5 min</div>
+      <i class="fas fa-chevron-down mod-chevron"></i>
+    </div>
+  </div>
+  <div class="mod-body">
+    <div class="mod-inner">
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-info-circle"></i> ¿En qué consiste esta actividad?</div>
+        <div class="info-block">
+          <h4>Descripción General</h4>
+          <p>Simulación de un <span class="highlight">"panel de control de sistemas"</span> donde los estudiantes ven dispositivos y aplicaciones con diferentes niveles de actualización. Deben identificar cuáles son vulnerables y "parchearlos" en orden de prioridad. Luego verifican en su propio celular/laptop si tienen actualizaciones pendientes y las instalan. Se enseña la regla del backup 3-2-1 como defensa contra ransomware.</p>
+        </div>
+        <div class="info-block">
+          <h4>Objetivo de Aprendizaje</h4>
+          <p>Al finalizar, el estudiante comprenderá que <span class="highlight">cada actualización pendiente es una puerta abierta</span> para hackers, activará las actualizaciones automáticas en su dispositivo y conocerá la regla de backup 3-2-1.</p>
+        </div>
+        <div class="info-block">
+          <h4>Fundamento Pedagógico</h4>
+          <p><span class="highlight">Gamificación con urgencia simulada</span>: el formato "panel de control" con indicadores de riesgo genera sensación de responsabilidad. La analogía médica (software sin actualizar = cuerpo sin vacunas) ancla el concepto en conocimiento previo. Nivel Bloom: <strong>Comprender + Aplicar</strong>.</p>
+        </div>
+      </div>
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-list-ol"></i> Paso a paso del Docente (5 minutos)</div>
+        <div class="step-flow">
+          <div class="step-item">
+            <div class="step-time">22:00–23:00</div>
+            <div class="step-desc"><strong>Analogía médica:</strong> <em>"Un software sin actualizar es como una persona sin vacunas: funciona bien... hasta que llega el virus."</em> Mostrar un ejemplo real: el ransomware WannaCry de 2017 afectó a 200,000 computadores porque no tenían una actualización disponible hacía 2 meses.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">23:00–24:30</div>
+            <div class="step-desc"><strong>Reto "Patrulla":</strong> Proyectar el panel de dispositivos. Los escuadrones deben priorizar qué actualizar primero (¿el sistema operativo, el navegador o la app de banco?). Respuesta correcta: SO > Navegador > Apps críticas. <strong>+10 puntos</strong> al equipo que priorice correctamente.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">24:30–26:00</div>
+            <div class="step-desc"><strong>Acción en vivo:</strong> Guiar a estudiantes a verificar actualizaciones en su celular: Android (Ajustes → Sistema → Actualización) / iOS (Ajustes → General → Actualización). Activar <strong>actualizaciones automáticas</strong>. <strong>+10 puntos</strong> con evidencia.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-time">26:00–27:00</div>
+            <div class="step-desc"><strong>Regla 3-2-1 de Backup:</strong> Enseñar en 60 segundos: <strong>3 copias</strong> de tus datos, en <strong>2 medios diferentes</strong> (nube + disco), <strong>1 copia fuera de casa</strong>. <em>"Si el ransomware cifra todo, tu backup es tu salvación."</em></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-play-circle"></i> Simulación interactiva de ejemplo</div>
+        <p style="font-size:0.82rem;color:var(--text-ghost);margin-bottom:0.8rem;">Panel de control de dispositivos. Haz clic en "Actualizar" para parchear cada dispositivo vulnerable.</p>
+
+        <div class="sim-box">
+          <div class="sim-top">
+            <h4><i class="fas fa-server" style="color:var(--accent-blue);"></i> Panel de Dispositivos</h4>
+            <div class="sim-score-bar">Actualizados: <span id="devUpdated" style="color:var(--accent-green);">0</span>/<span>6</span></div>
+          </div>
+          <div class="sim-content">
+            <div class="device-mock" id="devicePanel">
+              <div class="dev-card vulnerable" data-vuln="true">
+                <div class="dev-icon">💻</div>
+                <div class="dev-name">Windows 10</div>
+                <div class="dev-ver">v10.0.19041</div>
+                <div class="dev-status vuln">⚠ 3 parches pendientes</div>
+                <button class="dev-btn" onclick="updateDev(this)">Actualizar</button>
+              </div>
+              <div class="dev-card vulnerable" data-vuln="true">
+                <div class="dev-icon">🌐</div>
+                <div class="dev-name">Chrome</div>
+                <div class="dev-ver">v108.0.5359</div>
+                <div class="dev-status vuln">⚠ Versión obsoleta</div>
+                <button class="dev-btn" onclick="updateDev(this)">Actualizar</button>
+              </div>
+              <div class="dev-card vulnerable" data-vuln="true">
+                <div class="dev-icon">📱</div>
+                <div class="dev-name">Android</div>
+                <div class="dev-ver">v12.0</div>
+                <div class="dev-status vuln">⚠ Actualización crítica</div>
+                <button class="dev-btn" onclick="updateDev(this)">Actualizar</button>
+              </div>
+              <div class="dev-card vulnerable" data-vuln="true">
+                <div class="dev-icon">🏦</div>
+                <div class="dev-name">App Bancaria</div>
+                <div class="dev-ver">v4.2.1</div>
+                <div class="dev-status vuln">⚠ 1 parche de seguridad</div>
+                <button class="dev-btn" onclick="updateDev(this)">Actualizar</button>
+              </div>
+              <div class="dev-card vulnerable" data-vuln="true">
+                <div class="dev-icon">📧</div>
+                <div class="dev-name">Outlook</div>
+                <div class="dev-ver">v16.0.14326</div>
+                <div class="dev-status vuln">⚠ Vulnerabilidad conocida</div>
+                <button class="dev-btn" onclick="updateDev(this)">Actualizar</button>
+              </div>
+              <div class="dev-card vulnerable" data-vuln="true">
+                <div class="dev-icon">📡</div>
+                <div class="dev-name">Router WiFi</div>
+                <div class="dev-ver">Firmware v2.1</div>
+                <div class="dev-status vuln">⚠ Contraseña de fábrica</div>
+                <button class="dev-btn" onclick="updateDev(this)">Actualizar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CIERRE ═══════════ -->
+<div class="module rv" style="border-color:rgba(0,255,180,0.15);background:rgba(0,255,180,0.02);">
+  <div class="mod-banner" onclick="toggleMod(this.parentElement)">
+    <div class="mod-left">
+      <div class="mod-num" style="background:rgba(0,255,180,0.12);color:var(--accent-green);">CIERRE</div>
+      <div class="mod-title-area">
+        <h3><i class="fas fa-flag-checkered" style="color:var(--accent-green);margin-right:0.4rem;"></i> El Juramento del Guardián</h3>
+        <span>Premiación, compromiso de acción y cierre emocional</span>
+      </div>
+    </div>
+    <div class="mod-right">
+      <div class="mod-time"><i class="fas fa-clock"></i> 3 min</div>
+      <i class="fas fa-chevron-down mod-chevron"></i>
+    </div>
+  </div>
+  <div class="mod-body">
+    <div class="mod-inner">
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-info-circle"></i> ¿En qué consiste?</div>
+        <div class="info-block">
+          <h4>Descripción</h4>
+          <p>Cierre motivacional del taller. Se suman los puntos de los escuadrones, se premia al equipo ganador y cada estudiante declara públicamente <span class="highlight">una acción concreta que ejecutará hoy</span>. El taller termina con el "Juramento del Guardián" leído en voz alta por todo el grupo.</p>
+        </div>
+      </div>
+
+      <div class="mod-section">
+        <div class="mod-section-title"><i class="fas fa-list-ol"></i> Paso a paso (3 minutos)</div>
+        <div class="step-flow">
+          <div class="step-item" style="border-left-color:var(--accent-green);">
+            <div class="step-time" style="color:var(--accent-green);background:rgba(0,255,180,0.08);">27:00–28:00</div>
+            <div class="step-desc"><strong>Premiación:</strong> Sumar puntos finales. Anunciar escuadrón ganador. Badges: "Guardianes Élite", "Cazadores de Phishing", "Forjadores de Contraseñas".</div>
+          </div>
+          <div class="step-item" style="border-left-color:var(--accent-green);">
+            <div class="step-time" style="color:var(--accent-green);background:rgba(0,255,180,0.08);">28:00–29:00</div>
+            <div class="step-desc"><strong>"Mi Acción Hoy":</strong> Cada estudiante dice en voz alta o escribe en Mentimeter UNA acción que hará HOY (activar MFA, cambiar contraseña, revisar privacidad). Proyectar la nube de palabras en tiempo real.</div>
+          </div>
+          <div class="step-item" style="border-left-color:var(--accent-green);">
+            <div class="step-time" style="color:var(--accent-green);background:rgba(0,255,180,0.08);">29:00–30:00</div>
+            <div class="step-desc"><strong>Juramento del Guardián:</strong> Todo el grupo repite: <em>"Yo, Guardián Digital, me comprometo a proteger mis datos, los de mi familia y los de mi comunidad. Un clic puede cambiarlo todo."</em> Compartir enlace de Padlet para seguimiento.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div>
+</section>
+
+<!-- RESUMEN -->
+<section class="sec" id="resumen">
+<div class="sec-head rv">
+  <div class="sec-tag" style="color:var(--accent-green);">
+    <span style="background:var(--accent-green);">&nbsp;</span>
+    Distribución de Tiempo
+    <span style="background:var(--accent-green);">&nbsp;</span>
+  </div>
+  <h2>Resumen <span style="color:var(--accent-green)">Completo del Taller</span></h2>
+</div>
+
+<div class="rv" style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:14px;overflow:hidden;background:var(--bg-elevated);border:1px solid var(--border-dim);">
+    <thead>
+      <tr>
+        <th style="padding:1rem;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent-green);background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border-dim);">Módulo</th>
+        <th style="padding:1rem;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent-green);background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border-dim);">Amenaza</th>
+        <th style="padding:1rem;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent-green);background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border-dim);">Actividad Clave</th>
+        <th style="padding:1rem;text-align:center;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent-green);background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border-dim);">Tiempo</th>
+        <th style="padding:1rem;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent-green);background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border-dim);">Acción Real</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--border-dim);">
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--accent-red);font-weight:700;">M1 · Phishing</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Phishing & Ingeniería Social</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Cazadores de Phishing (detectar pistas en correos)</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-bright);text-align:center;font-family:'Fira Code',monospace;">8 min</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Aprender a verificar antes de hacer clic</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border-dim);">
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--accent-orange);font-weight:700;">M2 · Contraseñas</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Contraseñas Débiles</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Forjadores (competencia + evaluador de fuerza)</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-bright);text-align:center;font-family:'Fira Code',monospace;">7 min</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Activar MFA en correo principal</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border-dim);">
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--accent-violet);font-weight:700;">M3 · Privacidad</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Sobreexposición Digital</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Auditoría de perfil ficticio + revisión personal</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-bright);text-align:center;font-family:'Fira Code',monospace;">7 min</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Cambiar 3 configuraciones de privacidad</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border-dim);">
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--accent-blue);font-weight:700;">M4 · Updates</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Software Desactualizado</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Panel de dispositivos + priorización de parches</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-bright);text-align:center;font-family:'Fira Code',monospace;">5 min</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Activar actualizaciones automáticas</td>
+      </tr>
+      <tr>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--accent-green);font-weight:700;">Cierre</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">—</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Premiación + Juramento del Guardián</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-bright);text-align:center;font-family:'Fira Code',monospace;">3 min</td>
+        <td style="padding:0.9rem 1rem;font-size:0.85rem;color:var(--text-dim);">Compromiso público de 1 acción HOY</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" style="padding:1rem;font-weight:700;color:var(--text-bright);background:rgba(0,255,180,0.05);border-top:1px solid var(--border-active);">TOTAL</td>
+        <td style="padding:1rem;text-align:center;font-family:'Fira Code',monospace;font-weight:700;color:var(--accent-green);background:rgba(0,255,180,0.05);border-top:1px solid var(--border-active);font-size:1.1rem;">30 min</td>
+        <td style="padding:1rem;color:var(--text-dim);background:rgba(0,255,180,0.05);border-top:1px solid var(--border-active);font-size:0.85rem;">4 acciones concretas ejecutadas</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+</section>
+
+<footer>
+  <p style="margin-bottom:0.4rem;"><i class="fas fa-shield-halved" style="color:var(--accent-green);"></i> <strong>Guardianes de la Seguridad Digital</strong></p>
+  <p>Diseñado por <a href="#">Prof. Julio Andrés Silva Aragón</a> · Universidad Remington · 2026</p>
+  <p style="margin-top:0.3rem;font-size:0.72rem;">Taller de 30 minutos · 4 módulos con simulación interactiva · Uso académico libre</p>
+</footer>
+
+<script>
+// Nav scroll
+window.addEventListener('scroll',()=>{document.getElementById('mainNav').classList.toggle('scrolled',scrollY>50);});
+
+// Reveal on scroll
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('vis');});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// Counter
+let counted=false;
+const cObs=new IntersectionObserver(e=>{if(e[0].isIntersecting&&!counted){counted=true;animNum(document.getElementById('bigCounter'),95,'%');}},{threshold:0.5});
+const cEl=document.getElementById('bigCounter');
+if(cEl)cObs.observe(cEl.parentElement);
+function animNum(el,t,s){let c=0;const step=t/50;const i=setInterval(()=>{c+=step;if(c>=t){c=t;clearInterval(i);}el.textContent=Math.round(c)+s;},30);}
+
+// Module accordion
+function toggleMod(mod){
+  const wasOpen=mod.classList.contains('open');
+  document.querySelectorAll('.module').forEach(m=>m.classList.remove('open'));
+  if(!wasOpen)mod.classList.add('open');
+}
+
+// ═══ PHISHING SIMULATOR ═══
+let phishSet=new Set();
+const phishTot=document.querySelectorAll('#phishSim .sus').length;
+document.getElementById('phishTotal').textContent=phishTot;
+
+function phishClue(el){
+  if(el.classList.contains('found'))return;
+  el.classList.add('found');
+  phishSet.add(el);
+  document.getElementById('phishFound').textContent=phishSet.size;
+  showToast(el.dataset.tip,'var(--accent-red)');
+  if(phishSet.size===phishTot){
+    setTimeout(()=>{
+      const fb=document.getElementById('phishFB');
+      fb.innerHTML=`<div style="background:rgba(0,255,180,0.08);border:1px solid rgba(0,255,180,0.2);border-radius:10px;padding:1.2rem;text-align:center;">
+        <i class="fas fa-trophy" style="font-size:1.5rem;color:var(--accent-green);"></i>
+        <div style="font-weight:700;color:var(--accent-green);margin:0.4rem 0;">¡Todas las pistas encontradas!</div>
+        <div style="font-size:0.82rem;color:var(--text-dim);">Ahora podrías identificar un phishing real. Regla: ante la duda, NUNCA hagas clic.</div>
+      </div>`;
+      fb.classList.add('show');
+    },400);
+  }
+}
+
+function phishAction(a){
+  const fb=document.getElementById('phishFB');
+  const msgs={
+    click:`<div style="background:rgba(255,56,96,0.1);border:1px solid rgba(255,56,96,0.2);border-radius:10px;padding:1.2rem;text-align:center;">
+      <i class="fas fa-skull-crossbones" style="font-size:1.5rem;color:var(--accent-red);"></i>
+      <div style="font-weight:700;color:var(--accent-red);margin:0.4rem 0;">⚠️ ¡Caíste en el phishing!</div>
+      <div style="font-size:0.82rem;color:var(--text-dim);">Este enlace te habría llevado a un sitio falso. En la vida real, acabas de entregar tus credenciales a un criminal.</div>
+    </div>`,
+    report:`<div style="background:rgba(0,255,180,0.08);border:1px solid rgba(0,255,180,0.2);border-radius:10px;padding:1.2rem;text-align:center;">
+      <i class="fas fa-shield-halved" style="font-size:1.5rem;color:var(--accent-green);"></i>
+      <div style="font-weight:700;color:var(--accent-green);margin:0.4rem 0;">✅ ¡Decisión perfecta!</div>
+      <div style="font-size:0.82rem;color:var(--text-dim);">Reportar como phishing protege a todos los usuarios de la plataforma.</div>
+    </div>`,
+    call:`<div style="background:rgba(0,180,255,0.08);border:1px solid rgba(0,180,255,0.2);border-radius:10px;padding:1.2rem;text-align:center;">
+      <i class="fas fa-phone-volume" style="font-size:1.5rem;color:var(--accent-blue);"></i>
+      <div style="font-weight:700;color:var(--accent-blue);margin:0.4rem 0;">👍 ¡Buena decisión!</div>
+      <div style="font-size:0.82rem;color:var(--text-dim);">Verificar directamente con el banco por canales oficiales es una excelente práctica.</div>
+    </div>`
+  };
+  fb.innerHTML=msgs[a];
+  fb.classList.add('show');
+}
+
+// ═══ PASSWORD EVALUATOR ═══
+function evalPwd(v){
+  const len=v.length;
+  document.getElementById('pwdLen').textContent=len;
+  if(!len){
+    document.getElementById('pwdTime').textContent='—';
+    document.getElementById('pwdTime').style.color='var(--accent-red)';
+    document.getElementById('pwdScore').textContent='—';
+    document.getElementById('pwdScore').style.color='var(--text-ghost)';
+    document.getElementById('pwdEntropy').textContent='0';
+    document.getElementById('pwdFill').style.width='0%';
+    document.getElementById('pwdTips').innerHTML='';
+    return;
+  }
+  const hasLow=/[a-z]/.test(v),hasUp=/[A-Z]/.test(v),hasNum=/\d/.test(v),hasSym=/[^a-zA-Z0-9]/.test(v);
+  let pool=0;
+  if(hasLow)pool+=26;if(hasUp)pool+=26;if(hasNum)pool+=10;if(hasSym)pool+=32;
+  const entropy=Math.round(len*Math.log2(pool||1));
+  document.getElementById('pwdEntropy').textContent=entropy;
+  let time,score,color,pct;
+  if(entropy<28){time='Instantáneo';score='MUY DÉBIL';color='var(--accent-red)';pct=10;}
+  else if(entropy<36){time='Segundos';score='DÉBIL';color='var(--accent-red)';pct=25;}
+  else if(entropy<50){time='Horas';score='REGULAR';color='var(--accent-orange)';pct=40;}
+  else if(entropy<65){time='Meses';score='BUENA';color='var(--accent-orange)';pct=60;}
+  else if(entropy<80){time='Años';score='FUERTE';color='var(--accent-green)';pct=80;}
+  else{time='Siglos+';score='EXCELENTE';color='var(--accent-green)';pct=100;}
+  document.getElementById('pwdTime').textContent=time;
+  document.getElementById('pwdTime').style.color=color;
+  document.getElementById('pwdScore').textContent=score;
+  document.getElementById('pwdScore').style.color=color;
+  const fill=document.getElementById('pwdFill');
+  fill.style.width=pct+'%';
+  fill.style.background=color;
+
+  let tips='';
+  tips+=`<div class="pwd-tip ${len>=12?'pass':'fail'}"><i class="fas fa-${len>=12?'check':'xmark'}"></i> ${len>=12?'12+ caracteres ✓':'Mínimo 12 caracteres'}</div>`;
+  tips+=`<div class="pwd-tip ${hasUp?'pass':'fail'}"><i class="fas fa-${hasUp?'check':'xmark'}"></i> ${hasUp?'Mayúsculas ✓':'Falta mayúsculas'}</div>`;
+  tips+=`<div class="pwd-tip ${hasLow?'pass':'fail'}"><i class="fas fa-${hasLow?'check':'xmark'}"></i> ${hasLow?'Minúsculas ✓':'Falta minúsculas'}</div>`;
+  tips+=`<div class="pwd-tip ${hasNum?'pass':'fail'}"><i class="fas fa-${hasNum?'check':'xmark'}"></i> ${hasNum?'Números ✓':'Falta números'}</div>`;
+  tips+=`<div class="pwd-tip ${hasSym?'pass':'fail'}"><i class="fas fa-${hasSym?'check':'xmark'}"></i> ${hasSym?'Símbolos ✓':'Falta símbolos (!@#$%)'}</div>`;
+  document.getElementById('pwdTips').innerHTML=tips;
+}
+
+// ═══ PRIVACY SIMULATOR ═══
+function togglePriv(btn){
+  const item=btn.closest('.priv-item');
+  const isSafe=item.dataset.safe==='true';
+  item.dataset.safe=isSafe?'false':'true';
+  btn.className='priv-toggle '+(isSafe?'danger':'safe');
+  updatePrivScore();
+}
+
+function updatePrivScore(){
+  const items=document.querySelectorAll('#privItems .priv-item');
+  const safe=[...items].filter(i=>i.dataset.safe==='true').length;
+  const pct=Math.round((safe/items.length)*100);
+  const el=document.getElementById('privScore');
+  el.textContent=pct+'%';
+  el.style.color=pct>=80?'var(--accent-green)':pct>=50?'var(--accent-orange)':'var(--accent-red)';
+  const res=document.getElementById('privResult');
+  if(pct===100){
+    res.innerHTML=`<div style="color:var(--accent-green);font-weight:700;"><i class="fas fa-shield-halved"></i> ¡Perfil 100% protegido! Carlos está a salvo.</div>`;
+  } else if(pct>=50){
+    res.innerHTML=`<span style="color:var(--accent-orange);font-size:0.82rem;">Buen progreso, pero aún hay configuraciones peligrosas activas.</span>`;
+  } else {
+    res.innerHTML=`<span style="color:var(--accent-red);font-size:0.82rem;">⚠ Perfil muy expuesto. Un hacker podría robar la identidad de Carlos fácilmente.</span>`;
+  }
+}
+
+// ═══ DEVICE UPDATE SIMULATOR ═══
+function updateDev(btn){
+  const card=btn.closest('.dev-card');
+  if(card.classList.contains('updated'))return;
+  btn.textContent='Actualizando...';
+  btn.style.pointerEvents='none';
+  setTimeout(()=>{
+    card.classList.remove('vulnerable');
+    card.classList.add('updated');
+    card.querySelector('.dev-status').className='dev-status ok';
+    card.querySelector('.dev-status').textContent='✓ Al día';
+    btn.textContent='✓ Actualizado';
+    const count=document.querySelectorAll('.dev-card.updated').length;
+    document.getElementById('devUpdated').textContent=count;
+    if(count===6){
+      showToast('🛡️ ¡Todos los dispositivos actualizados! Sistema seguro.','var(--accent-green)');
+    }
+  },800);
+}
+
+// ═══ TOAST HELPER ═══
+function showToast(msg,color){
+  const t=document.createElement('div');
+  t.style.cssText=`position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:${color||'var(--accent-green)'};color:${color==='var(--accent-green)'?'var(--bg-void)':'#fff'};padding:0.75rem 1.5rem;border-radius:10px;font-size:0.82rem;font-weight:600;z-index:10000;animation:fadeUp 0.3s ease;max-width:520px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.5);`;
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),4000);
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});});
+
+// Active nav
+const secs=document.querySelectorAll('section.sec[id],.sec[id]');
+window.addEventListener('scroll',()=>{let c='';document.querySelectorAll('[id]').forEach(s=>{if(scrollY>=s.offsetTop-120)c=s.id;});document.querySelectorAll('.nav-menu a').forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+c);});});
+</script>
+</body>
+</html>
